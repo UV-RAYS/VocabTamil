@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  # Test Database (SQLite in container for isolation)
+  test-db:
+    image: alpine:latest
+    command: tail -f /dev/null
+    volumes:
+      - test_data:/data
+    environment:
+      - DB_TYPE=sqlite
+
+  # Test Redis (separate instance)
+  test-redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+    command: redis-server --port 6379 --databases 16
+    volumes:
+      - test_redis_data:/data
+
+  # Django Backend (Test Configuration)
+  test-backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile.test
+    environment:
+      - DJANGO_SETTINGS_MODULE=vocabtamil.settings_test
+      - SECRET_KEY=testing-secret-key-for-development-only
+      - DEBUG=True
+      - ALLOWED_HOSTS=localhost,127.0.0.1,testserver
+      - DATABASE_URL=sqlite:///test_vocabtamil.db
+      - REDIS_URL=redis://test-redis:6379/1
+      - AWS_ACCESS_KEY_ID=test-access-key
+      - AWS_SECRET_ACCESS_KEY=test-secret-key
+      - AWS_STORAGE_BUCKET_NAME=test-bucket
+      - GOOGLE_OAUTH2_CLIENT_ID=test-client-id
+      - GOOGLE_OAUTH2_CLIENT_SECRET=test-client-secret
+      - EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+      - ANALYTICS_ENABLED=False
+      - RATE_LIMIT_ENABLED=False
+      - MOCK_EXTERNAL_SERVICES=True
+    volumes:
+      - test_static:/app/test_static
+      - test_media:/app/test_media
+    ports:
+      - "8001:8000"
+    depends_on:
+      - test-redis
+    command: >
+      sh -c "python manage.py migrate --settings=vocabtamil.settings_test &&
+             python manage.py collectstatic --noinput --settings=vocabtamil.settings_test &&
+             python manage.py runserver 0.0.0.0:8000 --settings=vocabtamil.settings_test"
+
+  # Next.js Frontend (Test Configuration)
+  test-frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile.test
+    environment:
+      - NODE_ENV=test
+      - NEXT_PUBLIC_API_URL=http://localhost:8001/api
+      - NEXT_PUBLIC_APP_NAME=VocabTamil-Test
+      - NEXT_PUBLIC_ENVIRONMENT=testing
+      - NEXT_PUBLIC_ANALYTICS_ENABLED=false
+      - NEXT_PUBLIC_MOCK_EXTERNAL_SERVICES=true
+      - NEXT_PUBLIC_GOOGLE_CLIENT_ID=test-client-id
+    ports:
+      - "3001:3000"
+    depends_on:
+      - test-backend
+
+  # Test Runner Service
+  test-runner:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile.test
+    environment:
+      - DJANGO_SETTINGS_MODULE=vocabtamil.settings_test
+      - SECRET_KEY=testing-secret-key-for-development-only
+      - DATABASE_URL=sqlite:///test_vocabtamil.db
+      - REDIS_URL=redis://test-redis:6379/1
+    depends_on:
+      - test-redis
+    command: >
+      sh -c "python manage.py migrate --settings=vocabtamil.settings_test &&
+             python manage.py test --settings=vocabtamil.settings_test --keepdb"
+    profiles:
+      - test
+
+volumes:
+  test_data:
+  test_redis_data:
+  test_static:
+  test_media:

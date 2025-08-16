@@ -1,0 +1,46 @@
+# Test Dockerfile for VocabTamil Backend
+FROM python:3.11-slim
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV DEBIAN_FRONTEND=noninteractive
+ENV DJANGO_SETTINGS_MODULE=vocabtamil.settings_test
+
+# Set work directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential \
+        curl \
+        sqlite3 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt /app/
+COPY requirements-test.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements-test.txt
+
+# Copy project
+COPY . /app/
+
+# Create test directories
+RUN mkdir -p /app/test_static /app/test_media
+
+# Create non-root user
+RUN adduser --disabled-password --gecos '' testuser
+RUN chown -R testuser:testuser /app
+USER testuser
+
+# Expose port
+EXPOSE 8000
+
+# Health check for testing
+HEALTHCHECK --interval=10s --timeout=5s --start-period=2s --retries=2 \
+    CMD curl -f http://localhost:8000/api/health/ || exit 1
+
+# Default command for testing
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000", "--settings=vocabtamil.settings_test"]

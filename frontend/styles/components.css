@@ -1,0 +1,470 @@
+/* VocabTamil Component-Specific Styles */
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(135deg, #ed7014 0%, #f19234 25%, #38bdf8 75%, #0ea5e9 100%);
+  background-size: 400% 400%;
+  animation: gradient-shift 8s ease infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="50" r="0.5" fill="white" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  pointer-events: none;
+}
+
+.hero-title {
+  @apply text-5xl md:text-6xl lg:text-7xl font-bold text-white text-center leading-tight;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  animation: bounce-in 1s ease-out;
+}
+
+.hero-subtitle {
+  @apply text-xl md:text-2xl text-white/90 text-center mt-6 leading-relaxed;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  animation: fade-in 1s ease-out 0.3s both;
+}
+
+.hero-cta {
+  @apply mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center;
+  animation: slide-in-up 1s ease-out 0.6s both;
+}
+
+/* Navigation Bar */
+.navbar {
+  @apply bg-white/95 backdrop-blur-md border-b border-white/20 shadow-lg sticky top-0 z-50;
+  transition: all 0.3s ease;
+}
+
+.navbar-scrolled {
+  @apply bg-white/98 shadow-xl;
+}
+
+.navbar-brand {
+  @apply font-display font-bold text-2xl bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent;
+}
+
+.navbar-nav {
+  @apply flex items-center space-x-1;
+}
+
+.nav-item {
+  @apply relative;
+}
+
+.nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #ed7014, #0ea5e9);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-item:hover::after,
+.nav-item.active::after {
+  width: 100%;
+}
+
+/* Word Cards */
+.word-card {
+  @apply relative overflow-hidden;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+  backdrop-filter: blur(10px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.word-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(237, 112, 20, 0.1), transparent);
+  transition: left 0.6s ease;
+}
+
+.word-card:hover::before {
+  left: 100%;
+}
+
+.word-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(237, 112, 20, 0.15);
+}
+
+.tamil-word-display {
+  @apply font-tamil text-4xl md:text-5xl font-bold text-center mb-4;
+  background: linear-gradient(135deg, #ed7014, #d946ef, #0ea5e9);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 4s ease infinite;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.word-meaning {
+  @apply text-xl md:text-2xl text-gray-700 text-center font-medium;
+  transition: color 0.3s ease;
+}
+
+.word-card:hover .word-meaning {
+  @apply text-gray-900;
+}
+
+/* Audio Button */
+.audio-button {
+  @apply relative w-12 h-12 rounded-full bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center;
+  transform: scale(1);
+}
+
+.audio-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px rgba(237, 112, 20, 0.4);
+}
+
+.audio-button:active {
+  transform: scale(0.95);
+}
+
+.audio-button.playing {
+  animation: pulse-glow 1.5s ease-in-out infinite;
+}
+
+/* Quiz Interface */
+.quiz-container {
+  @apply max-w-4xl mx-auto p-6;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+  backdrop-filter: blur(20px);
+  border-radius: 2rem;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+}
+
+.quiz-question {
+  @apply text-2xl md:text-3xl font-semibold text-center mb-8 text-gray-800;
+  animation: fade-in 0.5s ease-out;
+}
+
+.quiz-options {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-4 mb-8;
+}
+
+.quiz-option {
+  @apply p-6 rounded-xl border-2 border-gray-200 bg-white/80 backdrop-blur-sm cursor-pointer transition-all duration-300 hover:border-primary-300 hover:shadow-lg hover:scale-[1.02];
+  position: relative;
+  overflow: hidden;
+}
+
+.quiz-option::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(237, 112, 20, 0.05), transparent);
+  transition: left 0.4s ease;
+}
+
+.quiz-option:hover::before {
+  left: 100%;
+}
+
+.quiz-option.selected {
+  @apply border-primary-500 bg-primary-50 shadow-lg;
+  transform: scale(1.02);
+}
+
+.quiz-option.correct {
+  @apply border-green-500 bg-green-50 text-green-800;
+  animation: success-pulse 0.6s ease-out;
+}
+
+.quiz-option.incorrect {
+  @apply border-red-500 bg-red-50 text-red-800;
+  animation: shake 0.5s ease-out;
+}
+
+.quiz-progress {
+  @apply w-full h-3 bg-gray-200 rounded-full overflow-hidden mb-6;
+}
+
+.quiz-progress-fill {
+  @apply h-full rounded-full transition-all duration-500 ease-out;
+  background: linear-gradient(90deg, #ed7014, #f19234, #0ea5e9);
+  background-size: 200% 100%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* Progress Dashboard */
+.stats-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8;
+}
+
+.stat-card {
+  @apply relative overflow-hidden;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+  backdrop-filter: blur(10px);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ed7014, #f19234, #0ea5e9, #d946ef);
+  background-size: 300% 100%;
+  animation: gradient-shift 4s ease infinite;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.stat-value {
+  @apply text-3xl md:text-4xl font-bold mb-2;
+  background: linear-gradient(135deg, #ed7014, #0ea5e9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-label {
+  @apply text-gray-600 font-medium uppercase tracking-wide text-sm;
+}
+
+/* Achievement Cards */
+.achievement-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+}
+
+.achievement-card {
+  @apply relative p-6 rounded-2xl border-2 transition-all duration-400;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
+  backdrop-filter: blur(10px);
+}
+
+.achievement-card.locked {
+  @apply border-gray-200 opacity-60;
+}
+
+.achievement-card.unlocked {
+  @apply border-yellow-300;
+  background: linear-gradient(135deg, rgba(254, 243, 199, 0.9) 0%, rgba(253, 230, 138, 0.9) 100%);
+  box-shadow: 0 10px 25px rgba(245, 158, 11, 0.2);
+  animation: bounce-in 0.8s ease-out;
+}
+
+.achievement-card:hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
+.achievement-icon {
+  @apply w-16 h-16 mx-auto mb-4 text-4xl flex items-center justify-center rounded-full;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.achievement-card.unlocked .achievement-icon {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Leaderboard */
+.leaderboard-item {
+  @apply flex items-center p-4 rounded-xl mb-3 transition-all duration-300;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.leaderboard-item:hover {
+  transform: translateX(4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-rank {
+  @apply w-10 h-10 rounded-full flex items-center justify-center font-bold text-white mr-4;
+}
+
+.leaderboard-rank.rank-1 {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+}
+
+.leaderboard-rank.rank-2 {
+  background: linear-gradient(135deg, #94a3b8, #64748b);
+  box-shadow: 0 4px 15px rgba(100, 116, 139, 0.4);
+}
+
+.leaderboard-rank.rank-3 {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
+}
+
+.leaderboard-rank.rank-other {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+}
+
+/* Learning Streak */
+.streak-display {
+  @apply text-center p-8 rounded-2xl;
+  background: linear-gradient(135deg, rgba(255, 237, 213, 0.9) 0%, rgba(254, 215, 170, 0.9) 100%);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(237, 112, 20, 0.2);
+}
+
+.streak-number {
+  @apply text-6xl md:text-7xl font-bold mb-4;
+  background: linear-gradient(135deg, #ed7014, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.streak-flame {
+  @apply text-6xl mb-4;
+  animation: float 2s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(245, 158, 11, 0.3));
+}
+
+/* Loading States */
+.loading-card {
+  @apply animate-shimmer;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  border-radius: 1rem;
+  height: 200px;
+}
+
+.loading-text {
+  @apply animate-shimmer;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  border-radius: 0.5rem;
+  height: 1rem;
+}
+
+/* Floating Elements */
+.floating-shapes {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.floating-shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.1;
+  animation: float 6s ease-in-out infinite;
+}
+
+.floating-shape:nth-child(1) {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #ed7014, #f19234);
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.floating-shape:nth-child(2) {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+  top: 60%;
+  right: 15%;
+  animation-delay: 2s;
+}
+
+.floating-shape:nth-child(3) {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #d946ef, #e879f9);
+  bottom: 30%;
+  left: 20%;
+  animation-delay: 4s;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .hero-title {
+    @apply text-4xl;
+  }
+  
+  .tamil-word-display {
+    @apply text-3xl;
+  }
+  
+  .quiz-container {
+    @apply p-4;
+  }
+  
+  .stat-card {
+    padding: 1.5rem;
+  }
+  
+  .streak-number {
+    @apply text-5xl;
+  }
+}
+
+/* Dark Mode Overrides */
+@media (prefers-color-scheme: dark) {
+  .dark-mode .word-card,
+  .dark-mode .stat-card,
+  .dark-mode .achievement-card,
+  .dark-mode .leaderboard-item {
+    background: linear-gradient(135deg, rgba(31, 41, 55, 0.9) 0%, rgba(17, 24, 39, 0.9) 100%);
+    border-color: rgba(75, 85, 99, 0.3);
+  }
+  
+  .dark-mode .quiz-container {
+    background: linear-gradient(135deg, rgba(31, 41, 55, 0.95) 0%, rgba(17, 24, 39, 0.95) 100%);
+  }
+  
+  .dark-mode .navbar {
+    @apply bg-gray-900/95;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .floating-shapes,
+  .audio-button,
+  .navbar {
+    display: none !important;
+  }
+  
+  .word-card,
+  .stat-card {
+    background: white !important;
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+}
